@@ -12,8 +12,8 @@ of meetings or a stay-at-home parent frantically juggling all their kids' extra-
 is perfect for anyone looking to efficiently organize and record the events and/or activities in store for the day.
 As a university student myself, I find it difficult keeping track of my class schedule along with pending assignment
 deadlines or club meetings and other errands. An application such as the Day Planner Assistant would allow me to 
-keep an organized record and track different activities or events I have that day along with necessary details such
-as the date and time, location, as well as a reminder.  
+keep an organized record and track different activities or events I have that day along with any necessary details such
+as the date and time, location, or reminders.  
 
 
 ## User Stories

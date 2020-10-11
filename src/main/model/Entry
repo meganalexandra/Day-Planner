@@ -1,6 +1,7 @@
 package model;
 
 // Represents an event/activity entry with the date,time,name,location and reminders
+
 public class Entry {
 
 }
