@@ -6,22 +6,24 @@ import java.util.ArrayList;
 public class Day {
     private ArrayList<Event> listOfEvents;     //  list of events for a day
 
+    // EFFECTS: creates a list of Events
     public Day() {
         listOfEvents = new ArrayList<Event>();
     }
 
     // MODIFIES: this
     // EFFECTS: adds an event to the listOfEvents for the day
-    public void add(Event event) {
+    public void addEvent(Event event) {
         listOfEvents.add(event);
     }
 
     // MODIFIES: this
     // EFFECTS: removes event to the listOfEvents for the day
-    public void remove(Event event) {
+    public void removeEvent(Event event) {
         listOfEvents.remove(event);
     }
 
+    // EFFECTS: returns the number of events in the day
     public int numberOfEvents() {
         if (listOfEvents == null) {
             return 0;
@@ -36,6 +38,7 @@ public class Day {
         return listOfEvents.get(position);
     }
 
+    // EFFECTS: returns true if an event already exists at the same time, false otherwise
     public Boolean checkDuplicate(Event inputEvent) {
         Boolean result;
         result = false;
@@ -48,14 +51,15 @@ public class Day {
         return result;
     }
 
-    // MODIFIES: this
-    // EFFECTS: adds event to the listOfEvents for the day
-    public Boolean addEvent(Event event) {
-        if (checkDuplicate(event)) {
-            return false;
-        } else {
-            listOfEvents.add(event);
-            return true;
+    // REQUIRES: non-empty list
+    // EFFECTS: returns the names of the Events in the planner
+    public String getEventNames() {
+        String eventNames = "";
+        for (Event name : listOfEvents) {
+            eventNames += name.getName() + "\n";
         }
+        return eventNames;
     }
 }
+
+

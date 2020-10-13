@@ -10,14 +10,14 @@ public class EventTest {
 
     @BeforeEach
     void runBefore() {
-        testEntry = new Event("voting", "Lougheed Mall", 12, "bring ID and voting card");
+        testEntry = new Event("voting", "Lougheed Mall", 1200, "bring ID and voting card");
     }
 
     @Test
     void testConstructor () {
         assertEquals("voting", testEntry.getName());
         assertEquals("Lougheed Mall", testEntry.getLocation());
-        assertEquals(12, testEntry.getTime());
+        assertEquals(1200, testEntry.getTime());
         assertEquals("bring ID and voting card", testEntry.getReminders());
     }
 }

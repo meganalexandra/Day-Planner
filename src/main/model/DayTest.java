@@ -2,7 +2,7 @@ package model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DayTest {
@@ -13,15 +13,22 @@ public class DayTest {
     @BeforeEach
     void runBefore() {
         dayTest = new Day();
-        event1 = new Event("voting", "Lougheed Mall", 12, "bring ID and voting card");
-        event2 = new Event("club interview", "zoom", 16, "https://us02web.zoom.us/u/kbt7MwD02n");
+        event1 = new Event("voting", "Lougheed Mall", 1200, "bring ID and voting card");
+        event2 = new Event("club interview", "zoom", 1600, "https://us02web.zoom.us/u/kbt7MwD02n");
+    }
+
+
+    @Test
+    void testDayTest() {
+        Day createDay = new Day();
+        assertEquals(0, createDay.numberOfEvents());
     }
 
     @Test
     void testAdd() {
         // initialize dayTest with 2 entries
-        dayTest.add(event1);
-        dayTest.add(event2);
+        dayTest.addEvent(event1);
+        dayTest.addEvent(event2);
 
         assertEquals(event1, dayTest.getEvent(0));
         assertEquals(event2, dayTest.getEvent(1));
@@ -30,11 +37,11 @@ public class DayTest {
     @Test
     void testRemove() {
         // initialize dayTest with 2 entries
-        dayTest.add(event1);
-        dayTest.add(event2);
+        dayTest.addEvent(event1);
+        dayTest.addEvent(event2);
 
         // remove event1
-        dayTest.remove(event1);
+        dayTest.removeEvent(event1);
 
         assertEquals(1, dayTest.numberOfEvents());
         assertEquals(event2, dayTest.getEvent(0));
@@ -57,7 +64,7 @@ public class DayTest {
     @Test
     void testCheckDuplicateTrue() {
         // initialize dayTest with event1
-        dayTest.add(event1);
+        dayTest.addEvent(event1);
 
         assertTrue(dayTest.checkDuplicate(event1));
     }
@@ -65,26 +72,18 @@ public class DayTest {
     @Test
     void testCheckDuplicateFalse() {
         // initialize dayTest with event1
-        dayTest.add(event1);
+        dayTest.addEvent(event1);
 
         assertFalse(dayTest.checkDuplicate(event2));
     }
 
     @Test
-    void testAddEventSuccess() {
-        // initialize dayTest with event1
-        dayTest.add(event1);
+    void testGetEventNames() {
+        // initialize dayTest with event1 and event2
+        dayTest.addEvent(event1);
+        dayTest.addEvent(event2);
 
-        assertTrue(dayTest.addEvent(event2));
-        assertEquals(event2, dayTest.getEvent(1));
-    }
-
-    @Test
-    void testAddEventFailure() {
-        // initialize dayTest with event1
-        dayTest.add(event1);
-
-        assertFalse(dayTest.addEvent(event1));
-        assertEquals(1, dayTest.numberOfEvents());
+        assertEquals(("voting\nclub interview\n"), dayTest.getEventNames());
     }
 }
+
