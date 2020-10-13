@@ -25,12 +25,8 @@ public class Day {
 
     // EFFECTS: returns the number of events in the day
     public int numberOfEvents() {
-        if (listOfEvents == null) {
-            return 0;
-        } else {
             return listOfEvents.size();
         }
-    }
 
     // MODIFIES: this
     // EFFECTS: gets the event at the given index in listOfEvents for the day
