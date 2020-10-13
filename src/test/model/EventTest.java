@@ -13,7 +13,7 @@ public class EventTest {
         testEntry = new Event("voting", "Lougheed Mall", 1200, "bring ID and voting card");
     }
 
-    // test constructor
+    // test Event constructor
     @Test
     void testEvent () {
         assertEquals("voting", testEntry.getName());
