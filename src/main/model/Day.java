@@ -18,7 +18,7 @@ public class Day {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes event to the listOfEvents for the day
+    // EFFECTS: removes event from the listOfEvents
     public void removeEvent(Event event) {
         listOfEvents.remove(event);
     }
