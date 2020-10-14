@@ -62,7 +62,7 @@ public class PlanningAssistant {
 
     // EFFECTS: displays menu of options to user
     private void displayMenu() {
-        System.out.println("\nSelect from:");
+        System.out.println("\nWelcome to the Day Planner Assistant! Please select from:");
         System.out.println("\ta -> add event");
         System.out.println("\tn -> get number of events");
         System.out.println("\tv -> view day planner");
@@ -101,6 +101,9 @@ public class PlanningAssistant {
 
     //EFFECTS: prints the list of events in the planner
     private void viewEvents() {
+        if (planner.numberOfEvents() == 0) {
+            System.out.println("You do not have any events in your planner");
+        }
         System.out.print(planner.getEventNames());
     }
 }
