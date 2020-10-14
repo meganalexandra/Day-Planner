@@ -7,7 +7,7 @@ public class Event {
     private int time;          // time of event entered as HHMM according to a 24 hour clock
     private String reminders;   // reminders for the event
 
-    /* REQUIRES: name, location, time in the format HHMM according to a 24 clock and reminders
+    /* REQUIRES: name, location, time in the format HHMM as an integer <= 2400 and reminders
      * EFFECTS: creates an Entry with entryName, location, time and listOfReminders
      */
     public Event(String entryName, String location, int time, String listOfReminders) {
