@@ -102,7 +102,7 @@ public class PlanningAssistant {
     //EFFECTS: prints the list of events in the planner
     private void viewEvents() {
         if (planner.numberOfEvents() == 0) {
-            System.out.println("You do not have any events in your planner");
+            System.out.println("You do not have any events in your planner.");
         }
         System.out.print(planner.getEventNames());
     }
