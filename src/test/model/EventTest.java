@@ -15,7 +15,7 @@ public class EventTest {
 
     // test Event constructor
     @Test
-    void testEvent () {
+    void testEvent() {
         assertEquals("voting", testEntry.getName());
         assertEquals("Lougheed Mall", testEntry.getLocation());
         assertEquals(1200, testEntry.getTime());

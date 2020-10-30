@@ -13,7 +13,7 @@ public class DayTest {
     @BeforeEach
     void runBefore() {
         dayTest = new Day("Sept 10");
-        event1 = new Event("voting", "Lougheed Mall",1200 , "bring ID and voting card");
+        event1 = new Event("voting", "Lougheed Mall", 1200, "bring ID and voting card");
         event2 = new Event("club interview", "zoom", 1600, "https://us02web.zoom.us/u/kbt7MwD02n");
     }
 
@@ -59,7 +59,7 @@ public class DayTest {
         dayTest.addEvent(event1);
         dayTest.addEvent(event2);
 
-        assertEquals(2,dayTest.numberOfEvents());
+        assertEquals(2, dayTest.numberOfEvents());
     }
 
     @Test
