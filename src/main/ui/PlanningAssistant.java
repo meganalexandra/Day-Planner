@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+// sourced from https://github.students.cs.ubc.ca/CPSC210/TellerApp.git
 // Represents the planning application
 public class PlanningAssistant {
     private static final String JSON_STORE = "./data/day.json";
@@ -122,6 +123,7 @@ public class PlanningAssistant {
         }
         System.out.print(planner.getListOfEvents());
     }
+
     // EFFECTS: saves the workroom to file
     private void saveDay() {
         try {

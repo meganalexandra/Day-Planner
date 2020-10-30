@@ -9,15 +9,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// sourced from https://github.com/stleary/JSON-java.git
 class JsonWriterTest extends JsonTest {
-    //NOTE TO CPSC 210 STUDENTS: the strategy in designing tests for the JsonWriter is to
-    //write data to a file and then use the reader to read it back in and check that we
-    //read in a copy of what was written out.
 
     @Test
     void testWriterInvalidFile() {
         try {
-            Day day = new Day("October 31");
+            Day day = new Day("General Date");
             JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
             writer.open();
             fail("IOException was expected");
@@ -27,9 +25,9 @@ class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterEmptyWorkroom() {
+    void testWriterEmptyDay() {
         try {
-            Day day = new Day("October 31");
+            Day day = new Day("General Date");
             JsonWriter writer = new JsonWriter("./data/testWriterEmptyDay.json");
             writer.open();
             writer.write(day);
@@ -37,7 +35,7 @@ class JsonWriterTest extends JsonTest {
 
             JsonReader reader = new JsonReader("./data/testWriterEmptyDay.json");
             day = reader.read();
-            assertEquals("October 31", day.getDate());
+            assertEquals("General Date", day.getDate());
             assertEquals(0, day.numberOfEvents());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
@@ -47,7 +45,7 @@ class JsonWriterTest extends JsonTest {
     @Test
     void testWriterGeneralDay() {
         try {
-            Day day = new Day("October 31");
+            Day day = new Day("General Date");
             day.addEvent(new Event("vote","lougheed mall", 1200, "bring ID"));
             day.addEvent(new Event("buy toilet paper","walmart", 1230, "bring reusable bag"));
             JsonWriter writer = new JsonWriter("./data/testWriterGeneralDay.json");
@@ -57,7 +55,7 @@ class JsonWriterTest extends JsonTest {
 
             JsonReader reader = new JsonReader("./data/testWriterGeneralDay.json");
             day = reader.read();
-            assertEquals("October 31", day.getDate());
+            assertEquals("General Date", day.getDate());
             List<Event> listOfEvents = day.getEvents();
             assertEquals(2, day.numberOfEvents());
             checkEvent("vote","lougheed mall", 1200, "bring ID", listOfEvents.get(0));

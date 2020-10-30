@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 
 import org.json.*;
 
-// modelled after https://github.com/stleary/JSON-java.git
-// Represents a reader that reads workroom from JSON data stored in file
+// sourced from https://github.com/stleary/JSON-java.git
+// Represents a reader that reads day from JSON data stored in file
 public class JsonReader {
     private String source;
 
@@ -59,7 +59,7 @@ public class JsonReader {
     }
 
     // MODIFIES: day
-    // EFFECTS: parses events from JSON object and adds it to workroom
+    // EFFECTS: parses events from JSON object and adds it to day
     private void addEvent(Day day, JSONObject jsonObject) {
         String name = jsonObject.getString("entryName");
         String location = jsonObject.getString("location");

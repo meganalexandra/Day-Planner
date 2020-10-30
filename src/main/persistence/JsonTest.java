@@ -4,7 +4,7 @@ import model.Event;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-// modelled after https://github.com/stleary/JSON-java.git
+// sourced from https://github.com/stleary/JSON-java.git
 public class JsonTest {
     protected void checkEvent(String name, String location, int time, String reminders, Event event) {
         assertEquals(name, event.getName());

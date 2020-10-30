@@ -1,11 +1,13 @@
 package persistence;
+
 import model.Day;
 import org.json.JSONObject;
 
 
 import java.io.*;
-// copied from https://github.com/stleary/JSON-java.git
-// Represents a writer that writes JSON representation of workroom to file
+// sourced from https://github.com/stleary/JSON-java.git
+// Represents a writer that writes JSON representation of day to file
+
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;

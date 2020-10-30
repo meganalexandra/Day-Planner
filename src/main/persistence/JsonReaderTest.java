@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// sourced from https://github.com/stleary/JSON-java.git
 class JsonReaderTest extends JsonTest {
 
     @Test
@@ -27,7 +28,7 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testReaderEmptyDay.json");
         try {
             Day day = reader.read();
-            assertEquals("October 31", day.getDate());
+            assertEquals("General Date", day.getDate());
             assertEquals(0, day.numberOfEvents());
         } catch (IOException e) {
             fail("Couldn't read from file");
@@ -39,7 +40,7 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testReaderGeneralDay.json");
         try {
             Day day = reader.read();
-            assertEquals("October 31", day.getDate());
+            assertEquals("General Date", day.getDate());
             List<Event> listOfEvents = day.getEvents();
             assertEquals(2, day.numberOfEvents());
             checkEvent("vote","lougheed mall", 1200, "bring ID", listOfEvents.get(0));
