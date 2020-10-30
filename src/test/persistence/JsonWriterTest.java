@@ -1,4 +1,4 @@
-package model;
+package persistence;
 
 import model.Event;
 import model.Day;
