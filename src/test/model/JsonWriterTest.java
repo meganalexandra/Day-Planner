@@ -1,8 +1,11 @@
-package persistence;
+package model;
 
 import model.Event;
 import model.Day;
 import org.junit.jupiter.api.Test;
+import persistence.JsonReader;
+import persistence.JsonTest;
+import persistence.JsonWriter;
 
 import java.io.IOException;
 import java.util.List;
