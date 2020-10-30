@@ -1,14 +1,26 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 // represents a list of entries of events/activities for a day
-public class Day {
+public class Day implements Writable {
+    private String date;
     private ArrayList<Event> listOfEvents;     //  list of events for a day
 
     // EFFECTS: creates a list of Events
-    public Day() {
+    public Day(String date) {
+        this.date = date;
         listOfEvents = new ArrayList<Event>();
+    }
+
+    public String getDate() {
+        return date;
     }
 
     // MODIFIES: this
@@ -34,6 +46,12 @@ public class Day {
         return listOfEvents.get(position);
     }
 
+    // EFFECTS: returns an unmodifiable list of events in the day planner
+    public List<Event> getEvents() {
+        return Collections.unmodifiableList(listOfEvents);
+    }
+
+
     // EFFECTS: returns true if an event already exists at the same time, false otherwise
     public Boolean checkDuplicate(Event inputEvent) {
         Boolean result;
@@ -49,12 +67,32 @@ public class Day {
 
     // REQUIRES: non-empty list
     // EFFECTS: returns the names of the Events in the planner
-    public String getEventNames() {
-        String eventNames = "";
+    public String getListOfEvents() {
+        String events = "";
         for (Event name : listOfEvents) {
-            eventNames += name.getName() + "\n";
+            events += name.getName() + " at " + name.getTime() + "\n";
         }
-        return eventNames;
+        return events;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("date", date);
+        json.put("listOfEvents", eventsToJson());
+        return json;
+    }
+
+
+    // EFFECTS: returns events in this day as a JSON array
+    private JSONArray eventsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Event e : listOfEvents) {
+            jsonArray.put(e.toJson());
+        }
+
+        return jsonArray;
     }
 }
 

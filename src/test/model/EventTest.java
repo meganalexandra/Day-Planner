@@ -19,6 +19,6 @@ public class EventTest {
         assertEquals("voting", testEntry.getName());
         assertEquals("Lougheed Mall", testEntry.getLocation());
         assertEquals(1200, testEntry.getTime());
-        assertEquals("bring ID and voting card", testEntry.getReminders());
+        assertEquals("bring ID and voting card", testEntry.getReminder());
     }
 }

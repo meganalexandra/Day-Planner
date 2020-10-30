@@ -21,6 +21,7 @@ keep an organized record and track different activities or events I have for the
 2. As a user, I want to be able to get the list of names of the events I have added.
 3. As a user, I want to be able to get the number of entries I have added.
 4. As a user, I want to be able to receive a warning message if I try to enter an event at the same time as an existing one.
-
+5. As a user, I want to be able to save my Day planner to file.
+6. As a user, I want to be able to load my Day planner from file.
 
 

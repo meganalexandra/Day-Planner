@@ -12,15 +12,16 @@ public class DayTest {
 
     @BeforeEach
     void runBefore() {
-        dayTest = new Day();
-        event1 = new Event("voting", "Lougheed Mall", 1200, "bring ID and voting card");
+        dayTest = new Day("Sept 10");
+        event1 = new Event("voting", "Lougheed Mall",1200 , "bring ID and voting card");
         event2 = new Event("club interview", "zoom", 1600, "https://us02web.zoom.us/u/kbt7MwD02n");
     }
 
 
     @Test
     void testDayTest() {
-        Day createDay = new Day();
+        Day createDay = new Day("Sept 10");
+        assertEquals("Sept 10", createDay.getDate());
         assertEquals(0, createDay.numberOfEvents());
     }
 
@@ -78,12 +79,12 @@ public class DayTest {
     }
 
     @Test
-    void testGetEventNames() {
+    void testGetListOfEvents() {
         // initialize dayTest with event1 and event2
         dayTest.addEvent(event1);
         dayTest.addEvent(event2);
 
-        assertEquals(("voting\nclub interview\n"), dayTest.getEventNames());
+        assertEquals(("voting at 1200\nclub interview at 1600\n"), dayTest.getListOfEvents());
     }
 }
 
