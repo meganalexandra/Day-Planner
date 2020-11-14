@@ -7,7 +7,6 @@ import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
 // sourced from https://github.students.cs.ubc.ca/CPSC210/TellerApp.git
@@ -121,7 +120,7 @@ public class PlanningAssistant {
         if (planner.numberOfEvents() == 0) {
             System.out.println("You do not have any events in your planner.");
         }
-        System.out.print(planner.getListOfEvents());
+        System.out.print(planner.getListOfEventsDetails());
     }
 
     // EFFECTS: saves the workroom to file
