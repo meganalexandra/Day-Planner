@@ -29,7 +29,7 @@ public class PlanningAssistant {
     // EFFECTS: runs the Planning Assistant Application
     private void runAssistant() {
         boolean keepGoing = true;
-        String command = null;
+        String command;
         scan = new Scanner(System.in);
 
         createDay();

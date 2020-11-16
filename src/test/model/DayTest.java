@@ -84,8 +84,8 @@ public class DayTest {
         dayTest.addEvent(event1);
         dayTest.addEvent(event2);
 
-        assertEquals(("1200 : voting at Lougheed Mall (reminder:bring ID and voting card)\n" +
-                "1600 : club interview at zoom (reminder:https://us02web.zoom.us/u/kbt7MwD02n)\n"),
+        assertEquals(("\n1200 : voting at Lougheed Mall (reminder:bring ID and voting card)\n" +
+                "\n1600 : club interview at zoom (reminder:https://us02web.zoom.us/u/kbt7MwD02n)\n"),
                 dayTest.getListOfEventsDetails());
     }
 }

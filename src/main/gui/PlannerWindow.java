@@ -1,94 +1,71 @@
 package gui;
 
-import sun.font.TrueTypeFont;
-
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
+
 import java.awt.*;
 import java.awt.event.*;
 
+import model.Event;
+import model.Day;
+import ui.PlanningAssistant;
 
-// Create planner window
 public class PlannerWindow extends JFrame implements ActionListener {
 
-    private JFrame mainFrame;
-    private JFrame eventEntry;
-    private JFrame eventView;
-    private JButton addEvents;
-    private JButton loadEvents;
-    private JButton done;
-    int width;
-    int height;
-    private JPanel container;
+    private int width;
+    private int height;
+    protected JButton addEventBtn;
+    protected JButton numberEventsBtn;
+    protected JButton viewEventsBtn;
+    protected JButton saveEventsBtn;
+    protected JButton loadEventsBtn;
+    protected JButton doneBtn;
+    protected JFrame mainFrame;
+    protected JFrame eventEntry;
+    private JTextField nameField;
+    private JTextField locationField;
+    private JTextField timeField;
+    private JTextField reminderField;
+    private Day planner;
 
     public PlannerWindow() {
-        createWindow();
+        planner = new Day("today");
+        getScreenDimensions();
+        createMainMenu();
     }
 
-    private void createWindow() {
-        getScreenDimensions();
-        createMenuWindow();
+    public void createMainMenu() {
+        mainFrame = new JFrame("Planner Main Menu");
+        addEventBtn = new JButton("Add Event");
+        addEventBtn.addActionListener(this);
+        numberEventsBtn = new JButton("Number of Events");
+        numberEventsBtn.addActionListener(this);
+        viewEventsBtn = new JButton("View Events");
+        viewEventsBtn.addActionListener(this);
+        saveEventsBtn = new JButton("Save Events");
+        saveEventsBtn.addActionListener(this);
+        loadEventsBtn = new JButton("Load Events");
+        loadEventsBtn.addActionListener(this);
+        mainFrame.add(addEventBtn);
+        mainFrame.add(numberEventsBtn);
+        mainFrame.add(viewEventsBtn);
+        mainFrame.add(saveEventsBtn);
+        mainFrame.add(loadEventsBtn);
+        mainFrame.setLayout(new GridLayout(5, 1));
+        mainFrame.setSize(width / 3, height / 2);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setTitle("Day Planner Assistant");
         mainFrame.setVisible(true);
     }
 
-    private void createMenuWindow() {
-        createMenuFrame();
-        createMenuPanels();
-
-    }
-
-    // MODIFIES: this
-    // EFFECTS: creates menu JFrame
-    private void createMenuFrame() {
-        mainFrame = new JFrame();
-        mainFrame.setSize(width / 4, height / 2);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setTitle("Planner");
-        mainFrame.setResizable(false);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: creates two JPanels side by side
-    private void createMenuPanels() {
-        container = new JPanel();
-        JPanel panelOne = new JPanel();
-        JPanel panelTwo = new JPanel();
-
-        panelOne.setBackground(Color.lightGray);
-        panelOne.add(new JLabel("View Planner"));
-        loadEvents = new JButton("Load Events");
-        loadEvents.addActionListener(this);
-        panelOne.add(loadEvents);
-
-        panelTwo.setBackground(Color.lightGray);
-        panelTwo.add(new JLabel("Edit Planner"));
-        addEvents = new JButton("Add Events");
-        addEvents.addActionListener(this);
-        panelTwo.add(addEvents);
-
-        container.add(panelOne);
-        container.add(panelTwo);
-        mainFrame.add(container);
-    }
-
-    private void getScreenDimensions() {
+    public void getScreenDimensions() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
         width = dimension.width;
         height = dimension.height;
-
     }
 
-    // MODIFIES: this
-    // EFFECTS: creates eventEntry window
-    private void createEventEntryWindow() {
-        createEventFrame();
-        createEventFields();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: creates JFrame for eventEntry
-    private void createEventFrame() {
+    public void createEventDetailsWindow() {
         eventEntry = new JFrame();
         eventEntry.setSize(width / 4, height / 2);
         eventEntry.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,54 +74,124 @@ public class PlannerWindow extends JFrame implements ActionListener {
         eventEntry.setTitle("New Event");
         eventEntry.setLayout(new FlowLayout());
         eventEntry.setBackground(Color.darkGray);
-    }
 
-    // MODIFIES: this
-    // EFFECTS: creates JFrame for eventFields
-    private void createEventFields() {
+        // create name field
         JLabel name = new JLabel("Name:");
         eventEntry.add(name);
-        JTextField nameField = new JTextField(25);
+        nameField = new JTextField(25);
         eventEntry.add(nameField);
+
+        // create location field
         JLabel location = new JLabel("Location:");
         eventEntry.add(location);
-        JTextField locationField = new JTextField(23);
+        locationField = new JTextField(23);
         eventEntry.add(locationField);
+
+        // create time field
         JLabel time = new JLabel("Time (enter as HHMM using 24 clock):");
         eventEntry.add(time);
-        JTextField timeField = new JTextField(8);
+        timeField = new JTextField(8);
         eventEntry.add(timeField);
+
+        // create reminder field
         JLabel reminder = new JLabel("Reminder:");
         eventEntry.add(reminder);
-        JTextField reminderField = new JTextField(23);
+        reminderField = new JTextField(23);
         eventEntry.add(reminderField);
-        done = new JButton("done");
-        done.addActionListener(this);
-        eventEntry.add(done);
+
+        // create done button
+        doneBtn = new JButton("done");
+        doneBtn.addActionListener(this);
+        eventEntry.add(doneBtn);
+
     }
 
-    private void createViewEventsWindow() {
-        eventView = new JFrame();
-        eventView.setSize(width / 4, height / 2);
-        eventView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        eventView.setResizable(false);
-        eventView.setLocationRelativeTo(null);
-        eventView.setTitle("Planner View");
-        eventView.setBackground(Color.DARK_GRAY);
+    private void createEventEntry(JFrame eventEntry) {
+        String name = nameField.getText();
+        String location = locationField.getText();
+        int time = Integer.parseInt(timeField.getText());
+        String reminder = reminderField.getText();
+        Event newEvent = new Event(name, location, time, reminder);
+
+        if (planner.checkDuplicate(newEvent)) {
+            eventEntry.setVisible(true);
+            JLabel eventExistsWarning = new JLabel("Warning: An event already exists at this time!");
+            eventExistsWarning.setForeground(Color.red);
+            eventEntry.add(eventExistsWarning);
+
+        } else {
+            planner.addEvent(newEvent);
+//            System.out.println("Event Successfully added to planner!");
+        }
+    }
+
+    private void viewEvents() {
+//        if (planner.numberOfEvents() == 0) {
+//            System.out.println("You do not have any events in your planner.");
+//        }
+        JFrame eventsList = new JFrame("Events List");
+        String [] events = {planner.getListOfEventsDetails()};
+        eventsList.add(new JList(events));
+        eventsList.pack();
+        eventsList.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        eventsList.setLocationRelativeTo(null);
+        eventsList.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == addEvents) {
-            createEventEntryWindow();
+        if (e.getSource() == addEventBtn) {
+            createEventDetailsWindow();
             eventEntry.setVisible(true);
         }
-        if (e.getSource() == done) {
-            eventEntry.dispose();
+        if (e.getSource() == numberEventsBtn) {
+            // get number of events
         }
-        if (e.getSource() == loadEvents) {
-            createViewEventsWindow();
-            eventView.setVisible(true);
+        if (e.getSource() == viewEventsBtn) {
+            viewEvents();
+        }
+        if (e.getSource() == saveEventsBtn) {
+            // JSon writer
+        }
+        if (e.getSource() == loadEventsBtn) {
+            // JSon reader
+        }
+        if (e.getSource() == doneBtn) {
+            eventEntry.dispose();
+            createEventEntry(eventEntry);
         }
     }
 }
+
+//    private void createNameField() {
+//        JLabel n = new JLabel("Name:");
+//        eventEntry.add(n);
+//        JTextField nameField = new JTextField(25);
+//        eventEntry.add(nameField);
+//        String name = nameField.getText();
+//    }
+//
+//    private void createLocationField() {
+//        JLabel l = new JLabel("Location:");
+//        eventEntry.add(l);
+//        JTextField locationField = new JTextField(23);
+//        eventEntry.add(locationField);
+//        String location = locationField.getText();
+//    }
+//
+//    private void createTimeField() {
+//        JLabel t = new JLabel("Time (enter as HHMM using 24 clock):");
+//        eventEntry.add(t);
+//        JTextField timeField = new JTextField(8);
+//        eventEntry.add(timeField);
+//        String timeString = timeField.getText();
+//        int time = Integer.parseInt(timeString);
+//    }
+//
+//    private void createReminderField() {
+//        JLabel r = new JLabel("Reminder:");
+//        eventEntry.add(r);
+//        JTextField reminderField = new JTextField(23);
+//        eventEntry.add(reminderField);
+//        String reminder = reminderField.getText();
+//    }
