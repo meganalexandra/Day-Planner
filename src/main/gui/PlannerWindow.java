@@ -5,19 +5,18 @@ import model.Event;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class PlannerWindow extends JFrame implements ActionListener {
 
-    public static final Color LIGHT_BLUE = new Color(51,153,255);
+    public static final Color LIGHT_BLUE = new Color(51, 153, 255);
     private int width;
     private int height;
     protected JButton addEventBtn;
@@ -38,6 +37,8 @@ public class PlannerWindow extends JFrame implements ActionListener {
     private static final String JSON_STORE = "./data/day.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
+
+
 
     public PlannerWindow() throws FileNotFoundException {
         planner = new Day("today");
@@ -88,6 +89,15 @@ public class PlannerWindow extends JFrame implements ActionListener {
         eventEntry.setLayout(new FlowLayout());
         eventEntry.setBackground(Color.darkGray);
 
+        createFields();
+
+        // create done button
+        doneBtn = new JButton("done");
+        doneBtn.addActionListener(this);
+        eventEntry.add(doneBtn);
+    }
+
+    private void createFields() {
         // create name field
         JLabel name = new JLabel("Name:");
         eventEntry.add(name);
@@ -112,12 +122,6 @@ public class PlannerWindow extends JFrame implements ActionListener {
         reminderField = new JTextField(23);
         eventEntry.add(reminderField);
 
-        // create done button
-        doneBtn = new JButton("done");
-        doneBtn.addActionListener(this);
-        eventEntry.add(doneBtn);
-
-
     }
 
     private void createEventEntry() {
@@ -129,11 +133,12 @@ public class PlannerWindow extends JFrame implements ActionListener {
 
         if (planner.checkDuplicate(newEvent)) {
             warningWindow();
+            planner.addEvent(newEvent);
+        } else {
+            planner.addEvent(newEvent);
+            playSound("success_sound.wav");
+            eventEntry.dispose();
         }
-
-        planner.addEvent(newEvent);
-        playSound("success_sound.wav");
-        eventEntry.dispose();
     }
 
     //EFFECTS: prints the list of events in the planner
@@ -170,7 +175,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         JLabel eventExistsWarning = new JLabel("Event already exists at this time!");
         eventExistsWarning.setForeground(Color.red);
         completeBtn = new JButton("complete");
-        completeBtn.setBounds(50,100,10,10);
+        completeBtn.setBounds(50, 100, 10, 10);
         completeBtn.addActionListener(this);
         warning.add(completeBtn);
         warning.add(eventExistsWarning);

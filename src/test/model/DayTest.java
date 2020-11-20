@@ -9,12 +9,14 @@ public class DayTest {
     private Day dayTest;
     private Event event1;
     private Event event2;
+    private Event event3;
 
     @BeforeEach
     void runBefore() {
         dayTest = new Day("Sept 10");
         event1 = new Event("voting", "Lougheed Mall", 1200, "bring ID and voting card");
         event2 = new Event("club interview", "zoom", 1600, "https://us02web.zoom.us/u/kbt7MwD02n");
+        event3 = new Event("orthodontist appointment", "Monarch Dental", 1300, "bring retainer");
     }
 
 
@@ -26,13 +28,21 @@ public class DayTest {
     }
 
     @Test
+    void testAddEmptyList() {
+        dayTest.addEvent(event1);
+        assertEquals(event1, dayTest.getEvent(0));
+    }
+
+    @Test
     void testAdd() {
         // initialize dayTest with 2 entries
         dayTest.addEvent(event1);
         dayTest.addEvent(event2);
-
+        dayTest.addEvent(event3);
+        System.out.println(dayTest);
         assertEquals(event1, dayTest.getEvent(0));
-        assertEquals(event2, dayTest.getEvent(1));
+        assertEquals(event2, dayTest.getEvent(2));
+        assertEquals(event3, dayTest.getEvent(3));
     }
 
     @Test

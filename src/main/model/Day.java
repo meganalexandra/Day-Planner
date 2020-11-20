@@ -4,28 +4,38 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Collections;
 import java.util.List;
 
 // represents a list of entries of events/activities for a day
 public class Day implements Writable {
     private String date;
-    private ArrayList<Event> listOfEvents;     //  list of events for a day
+    private LinkedList<Event> listOfEvents;     //  list of events for a day
 
     // EFFECTS: creates a list of Events
     public Day(String date) {
         this.date = date;
-        listOfEvents = new ArrayList<Event>();
+        listOfEvents = new LinkedList<>();
     }
 
     public String getDate() {
         return date;
     }
 
+
     // MODIFIES: this
     // EFFECTS: adds an event to the listOfEvents for the day
     public void addEvent(Event event) {
+        if (listOfEvents.size() != 0) {
+            for (Event e : listOfEvents) {
+                if (event.getTime() <= e.getTime()) {
+                    int index = listOfEvents.indexOf(e);
+                    listOfEvents.add(index, event);
+                    break;
+                }
+            }
+        }
         listOfEvents.add(event);
     }
 
@@ -70,7 +80,7 @@ public class Day implements Writable {
     public String getListOfEventsDetails() {
         String events = "";
         for (Event event : listOfEvents) {
-            events += event.getEventDetails(event);
+            events += event.getEventDetails();
         }
         return events;
     }

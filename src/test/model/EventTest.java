@@ -21,4 +21,10 @@ public class EventTest {
         assertEquals(1200, testEntry.getTime());
         assertEquals("bring ID and voting card", testEntry.getReminder());
     }
+
+    @Test
+    void testGetEventDetails() {
+        assertEquals("\n1200 : voting at Lougheed Mall (reminder:bring ID and voting card)\n",
+                testEntry.getEventDetails());
+    }
 }
