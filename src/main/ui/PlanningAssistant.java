@@ -70,7 +70,7 @@ public class PlanningAssistant {
     // MODIFIES: this
     // EFFECTS: creates the day planner
     private void createDay() {
-        planner = new Day("October 31");
+        planner = new Day("today");
         scan = new Scanner(System.in);
     }
 

@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class PlannerWindow extends JFrame implements ActionListener {
 
-    public static final Color LIGHT_BLUE = new Color(51, 153, 255);
+    public static final Color LIGHT_BLUE = new Color(100, 140, 250);
     private int width;
     private int height;
     protected JButton addEventBtn;
@@ -39,7 +39,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
     private JsonReader jsonReader;
 
 
-
+    // set up day planner assistant
     public PlannerWindow() throws FileNotFoundException {
         planner = new Day("today");
         jsonWriter = new JsonWriter(JSON_STORE);
@@ -48,6 +48,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         createMainMenu();
     }
 
+    // EFFECTS: creates main menu
     public void createMainMenu() {
         mainFrame = new JFrame("Planner Main Menu");
         addEventBtn = new JButton("Add Event");
@@ -60,18 +61,20 @@ public class PlannerWindow extends JFrame implements ActionListener {
         saveEventsBtn.addActionListener(this);
         loadEventsBtn = new JButton("Load Events");
         loadEventsBtn.addActionListener(this);
+        mainFrame.getContentPane().setBackground(LIGHT_BLUE);
         mainFrame.add(addEventBtn);
         mainFrame.add(numberEventsBtn);
         mainFrame.add(viewEventsBtn);
         mainFrame.add(saveEventsBtn);
         mainFrame.add(loadEventsBtn);
-        mainFrame.setLayout(new GridLayout(5, 1));
+        mainFrame.setLayout(new GridLayout(10, 1));
         mainFrame.setSize(width / 3, height / 2);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setTitle("Day Planner Assistant");
         mainFrame.setVisible(true);
     }
 
+    // EFFECTS: gets screen dimensions
     public void getScreenDimensions() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
@@ -79,15 +82,16 @@ public class PlannerWindow extends JFrame implements ActionListener {
         height = dimension.height;
     }
 
+    // EFFECTS: creates event details window
     public void createEventDetailsWindow() {
         eventEntry = new JFrame();
-        eventEntry.setSize(width / 4, height / 2);
+        eventEntry.setSize(400,500);
         eventEntry.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         eventEntry.setResizable(false);
         eventEntry.setLocationRelativeTo(null);
         eventEntry.setTitle("New Event");
         eventEntry.setLayout(new FlowLayout());
-        eventEntry.setBackground(Color.darkGray);
+        eventEntry.getContentPane().setBackground(LIGHT_BLUE);
 
         createFields();
 
@@ -97,6 +101,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         eventEntry.add(doneBtn);
     }
 
+    // EFFECTS: creates event details fields
     private void createFields() {
         // create name field
         JLabel name = new JLabel("Name:");
@@ -107,13 +112,13 @@ public class PlannerWindow extends JFrame implements ActionListener {
         // create location field
         JLabel location = new JLabel("Location:");
         eventEntry.add(location);
-        locationField = new JTextField(23);
+        locationField = new JTextField(24);
         eventEntry.add(locationField);
 
         // create time field
-        JLabel time = new JLabel("Time (enter as HHMM using 24 clock):");
+        JLabel time = new JLabel("Time (enter as 24 hours (H)HMM):");
         eventEntry.add(time);
-        timeField = new JTextField(8);
+        timeField = new JTextField(11);
         eventEntry.add(timeField);
 
         // create reminder field
@@ -124,6 +129,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
 
     }
 
+    // EFFECTS: saves event entry locally
     private void createEventEntry() {
         String name = nameField.getText();
         String location = locationField.getText();
@@ -133,61 +139,76 @@ public class PlannerWindow extends JFrame implements ActionListener {
 
         if (planner.checkDuplicate(newEvent)) {
             warningWindow();
-            planner.addEvent(newEvent);
         } else {
-            planner.addEvent(newEvent);
             playSound("success_sound.wav");
             eventEntry.dispose();
         }
+        planner.addEvent(newEvent);
     }
 
-    //EFFECTS: prints the list of events in the planner
+    // EFFECTS: displays the list of events in the planner
     private void viewEvents() {
         JFrame eventsList = new JFrame("Events List");
         eventsList.setSize(width / 4, height / 2);
         eventsList.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         eventsList.setLocationRelativeTo(null);
-        eventsList.setBackground(LIGHT_BLUE);
+        eventsList.getContentPane().setBackground(LIGHT_BLUE);
+        eventsList.setLayout(new GridLayout(10, 1));
 
         if (planner.numberOfEvents() == 0) {
             JLabel noEvents = new JLabel("You do not have any events in your planner.");
-            noEvents.setForeground(Color.red);
+            noEvents.setBackground(Color.white);
+            noEvents.setOpaque(true);
             eventsList.add(noEvents);
+            eventsList.pack();
             eventsList.setVisible(true);
         }
-        String[] events = {planner.getListOfEventsDetails()};
-        eventsList.add(new JList(events));
+
+        for (Event e: planner.getEvents()) {
+            JLabel label = new JLabel(e.getEventDetails());
+            eventsList.add(label);
+        }
+
+        eventsList.pack();
         eventsList.setVisible(true);
     }
 
+    // EFFECTS: gets the number of events
     private void numberOfEvents() {
         JFrame numberEvents = new JFrame("Number Of Events");
+        JLabel number = new JLabel("You currently have " + planner.numberOfEvents() + " event(s) in your planner!");
+        number.setBackground(Color.white);
+        number.setOpaque(true);
+        numberEvents.setLayout(new GridLayout(10, 1));
         numberEvents.setSize(width / 4, height / 2);
         numberEvents.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        numberEvents.setLocationRelativeTo(null);
-        JLabel number = new JLabel(String.valueOf(planner.numberOfEvents()));
+        numberEvents.getContentPane().setBackground(LIGHT_BLUE);
         numberEvents.add(number);
+        numberEvents.setLocationRelativeTo(null);
         numberEvents.setVisible(true);
     }
 
+    // EFFECTS: create the warning window
     private void warningWindow() {
         warning = new JFrame("Warning");
         JLabel eventExistsWarning = new JLabel("Event already exists at this time!");
         eventExistsWarning.setForeground(Color.red);
         completeBtn = new JButton("complete");
-        completeBtn.setBounds(50, 100, 10, 10);
         completeBtn.addActionListener(this);
-        warning.add(completeBtn);
         warning.add(eventExistsWarning);
-        warning.setLayout(new GridLayout(2, 1));
-        warning.setSize(width / 4, height / 4);
+        warning.add(completeBtn);
+        warning.getContentPane().setBackground(Color.LIGHT_GRAY);
+        warning.setLayout(new GridLayout(15, 1));
+        warning.setSize(width / 4, height / 2);
         warning.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        warning.setLocationRelativeTo(null);
         warning.setVisible(true);
         playSound("warning_sound.wav");
     }
 
+    // MODIFIES: this
     // EFFECTS: saves the workroom to file
-    private void saveDay() {
+    private void savePlanner() {
         try {
             jsonWriter.open();
             jsonWriter.write(planner);
@@ -200,7 +221,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
 
     // MODIFIES: this
     // EFFECTS: loads workroom from file
-    private void loadDay() {
+    private void loadPlanner() {
         try {
             planner = jsonReader.read();
             System.out.println("Loaded " + planner.getDate() + " from " + JSON_STORE);
@@ -209,6 +230,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECTS: creates and plays notification sound
     public void playSound(String soundName) {
         try {
             AudioInputStream warningSound = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
@@ -221,7 +243,6 @@ public class PlannerWindow extends JFrame implements ActionListener {
             successClip.open(successSound);
             successClip.start();
 
-
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -231,6 +252,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECTS: performs actions from action listener
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addEventBtn) {
@@ -244,10 +266,10 @@ public class PlannerWindow extends JFrame implements ActionListener {
             viewEvents();
         }
         if (e.getSource() == saveEventsBtn) {
-            saveDay();
+            savePlanner();
         }
         if (e.getSource() == loadEventsBtn) {
-            loadDay();
+            loadPlanner();
         }
         if (e.getSource() == doneBtn) {
             createEventEntry();
@@ -258,36 +280,3 @@ public class PlannerWindow extends JFrame implements ActionListener {
         }
     }
 }
-
-//    private void createNameField() {
-//        JLabel n = new JLabel("Name:");
-//        eventEntry.add(n);
-//        JTextField nameField = new JTextField(25);
-//        eventEntry.add(nameField);
-//        String name = nameField.getText();
-//    }
-//
-//    private void createLocationField() {
-//        JLabel l = new JLabel("Location:");
-//        eventEntry.add(l);
-//        JTextField locationField = new JTextField(23);
-//        eventEntry.add(locationField);
-//        String location = locationField.getText();
-//    }
-//
-//    private void createTimeField() {
-//        JLabel t = new JLabel("Time (enter as HHMM using 24 clock):");
-//        eventEntry.add(t);
-//        JTextField timeField = new JTextField(8);
-//        eventEntry.add(timeField);
-//        String timeString = timeField.getText();
-//        int time = Integer.parseInt(timeString);
-//    }
-//
-//    private void createReminderField() {
-//        JLabel r = new JLabel("Reminder:");
-//        eventEntry.add(r);
-//        JTextField reminderField = new JTextField(23);
-//        eventEntry.add(reminderField);
-//        String reminder = reminderField.getText();
-//    }

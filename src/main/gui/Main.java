@@ -1,7 +1,5 @@
 package gui;
 
-import gui.PlannerWindow;
-
 import java.io.FileNotFoundException;
 
 public class Main {
