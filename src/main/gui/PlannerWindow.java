@@ -5,9 +5,11 @@ import model.Event;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,6 +17,7 @@ import java.awt.event.ActionListener;
 
 public class PlannerWindow extends JFrame implements ActionListener {
 
+    public static final Color LIGHT_BLUE = new Color(51,153,255);
     private int width;
     private int height;
     protected JButton addEventBtn;
@@ -129,6 +132,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         }
 
         planner.addEvent(newEvent);
+        playSound("success_sound.wav");
         eventEntry.dispose();
     }
 
@@ -138,6 +142,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         eventsList.setSize(width / 4, height / 2);
         eventsList.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         eventsList.setLocationRelativeTo(null);
+        eventsList.setBackground(LIGHT_BLUE);
 
         if (planner.numberOfEvents() == 0) {
             JLabel noEvents = new JLabel("You do not have any events in your planner.");
@@ -156,7 +161,6 @@ public class PlannerWindow extends JFrame implements ActionListener {
         numberEvents.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         numberEvents.setLocationRelativeTo(null);
         JLabel number = new JLabel(String.valueOf(planner.numberOfEvents()));
-        number.setForeground(Color.black);
         numberEvents.add(number);
         numberEvents.setVisible(true);
     }
@@ -174,6 +178,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         warning.setSize(width / 4, height / 4);
         warning.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         warning.setVisible(true);
+        playSound("warning_sound.wav");
     }
 
     // EFFECTS: saves the workroom to file
@@ -196,6 +201,28 @@ public class PlannerWindow extends JFrame implements ActionListener {
             System.out.println("Loaded " + planner.getDate() + " from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
+
+    public void playSound(String soundName) {
+        try {
+            AudioInputStream warningSound = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            Clip warningClip = AudioSystem.getClip();
+            warningClip.open(warningSound);
+            warningClip.start();
+
+            AudioInputStream successSound = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            Clip successClip = AudioSystem.getClip();
+            successClip.open(successSound);
+            successClip.start();
+
+
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
         }
     }
 
@@ -223,7 +250,6 @@ public class PlannerWindow extends JFrame implements ActionListener {
         if (e.getSource() == completeBtn) {
             warning.dispose();
             eventEntry.dispose();
-
         }
     }
 }
