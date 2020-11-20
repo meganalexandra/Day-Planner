@@ -1,14 +1,17 @@
 package gui;
 
-import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
-
-import java.awt.*;
-import java.awt.event.*;
-
-import model.Event;
 import model.Day;
-import ui.PlanningAssistant;
+import model.Event;
+import persistence.JsonReader;
+import persistence.JsonWriter;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class PlannerWindow extends JFrame implements ActionListener {
 
@@ -20,6 +23,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
     protected JButton saveEventsBtn;
     protected JButton loadEventsBtn;
     protected JButton doneBtn;
+    protected JButton completeBtn;
     protected JFrame mainFrame;
     protected JFrame eventEntry;
     private JTextField nameField;
@@ -27,9 +31,15 @@ public class PlannerWindow extends JFrame implements ActionListener {
     private JTextField timeField;
     private JTextField reminderField;
     private Day planner;
+    private JFrame warning;
+    private static final String JSON_STORE = "./data/day.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
-    public PlannerWindow() {
+    public PlannerWindow() throws FileNotFoundException {
         planner = new Day("today");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         getScreenDimensions();
         createMainMenu();
     }
@@ -68,7 +78,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
     public void createEventDetailsWindow() {
         eventEntry = new JFrame();
         eventEntry.setSize(width / 4, height / 2);
-        eventEntry.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        eventEntry.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         eventEntry.setResizable(false);
         eventEntry.setLocationRelativeTo(null);
         eventEntry.setTitle("New Event");
@@ -104,9 +114,10 @@ public class PlannerWindow extends JFrame implements ActionListener {
         doneBtn.addActionListener(this);
         eventEntry.add(doneBtn);
 
+
     }
 
-    private void createEventEntry(JFrame eventEntry) {
+    private void createEventEntry() {
         String name = nameField.getText();
         String location = locationField.getText();
         int time = Integer.parseInt(timeField.getText());
@@ -114,28 +125,78 @@ public class PlannerWindow extends JFrame implements ActionListener {
         Event newEvent = new Event(name, location, time, reminder);
 
         if (planner.checkDuplicate(newEvent)) {
-            eventEntry.setVisible(true);
-            JLabel eventExistsWarning = new JLabel("Warning: An event already exists at this time!");
-            eventExistsWarning.setForeground(Color.red);
-            eventEntry.add(eventExistsWarning);
+            warningWindow();
+        }
 
-        } else {
-            planner.addEvent(newEvent);
-//            System.out.println("Event Successfully added to planner!");
+        planner.addEvent(newEvent);
+        eventEntry.dispose();
+    }
+
+    //EFFECTS: prints the list of events in the planner
+    private void viewEvents() {
+        JFrame eventsList = new JFrame("Events List");
+        eventsList.setSize(width / 4, height / 2);
+        eventsList.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        eventsList.setLocationRelativeTo(null);
+
+        if (planner.numberOfEvents() == 0) {
+            JLabel noEvents = new JLabel("You do not have any events in your planner.");
+            noEvents.setForeground(Color.red);
+            eventsList.add(noEvents);
+            eventsList.setVisible(true);
+        }
+        String[] events = {planner.getListOfEventsDetails()};
+        eventsList.add(new JList(events));
+        eventsList.setVisible(true);
+    }
+
+    private void numberOfEvents() {
+        JFrame numberEvents = new JFrame("Number Of Events");
+        numberEvents.setSize(width / 4, height / 2);
+        numberEvents.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        numberEvents.setLocationRelativeTo(null);
+        JLabel number = new JLabel(String.valueOf(planner.numberOfEvents()));
+        number.setForeground(Color.black);
+        numberEvents.add(number);
+        numberEvents.setVisible(true);
+    }
+
+    private void warningWindow() {
+        warning = new JFrame("Warning");
+        JLabel eventExistsWarning = new JLabel("Event already exists at this time!");
+        eventExistsWarning.setForeground(Color.red);
+        completeBtn = new JButton("complete");
+        completeBtn.setBounds(50,100,10,10);
+        completeBtn.addActionListener(this);
+        warning.add(completeBtn);
+        warning.add(eventExistsWarning);
+        warning.setLayout(new GridLayout(2, 1));
+        warning.setSize(width / 4, height / 4);
+        warning.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        warning.setVisible(true);
+    }
+
+    // EFFECTS: saves the workroom to file
+    private void saveDay() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(planner);
+            jsonWriter.close();
+            System.out.println("Saved " + planner.getDate() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
         }
     }
 
-    private void viewEvents() {
-//        if (planner.numberOfEvents() == 0) {
-//            System.out.println("You do not have any events in your planner.");
-//        }
-        JFrame eventsList = new JFrame("Events List");
-        String [] events = {planner.getListOfEventsDetails()};
-        eventsList.add(new JList(events));
-        eventsList.pack();
-        eventsList.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        eventsList.setLocationRelativeTo(null);
-        eventsList.setVisible(true);
+    // MODIFIES: this
+    // EFFECTS: loads workroom from file
+    private void loadDay() {
+        try {
+            planner = jsonReader.read();
+            System.out.println("Loaded " + planner.getDate() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 
     @Override
@@ -145,20 +206,24 @@ public class PlannerWindow extends JFrame implements ActionListener {
             eventEntry.setVisible(true);
         }
         if (e.getSource() == numberEventsBtn) {
-            // get number of events
+            numberOfEvents();
         }
         if (e.getSource() == viewEventsBtn) {
             viewEvents();
         }
         if (e.getSource() == saveEventsBtn) {
-            // JSon writer
+            saveDay();
         }
         if (e.getSource() == loadEventsBtn) {
-            // JSon reader
+            loadDay();
         }
         if (e.getSource() == doneBtn) {
+            createEventEntry();
+        }
+        if (e.getSource() == completeBtn) {
+            warning.dispose();
             eventEntry.dispose();
-            createEventEntry(eventEntry);
+
         }
     }
 }

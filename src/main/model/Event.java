@@ -36,6 +36,11 @@ public class Event implements Writable {
         return reminder;
     }
 
+    public String getEventDetails(Event event) {
+        return "\n" + event.getTime() + " : " + event.getName() + " at " + event.getLocation() + " (reminder:"
+                + event.getReminder() + ")" + "\n";
+    }
+
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

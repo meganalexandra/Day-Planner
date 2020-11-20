@@ -70,8 +70,7 @@ public class Day implements Writable {
     public String getListOfEventsDetails() {
         String events = "";
         for (Event event : listOfEvents) {
-            events += "\n" + event.getTime() + " : " + event.getName() + " at " + event.getLocation() + " (reminder:"
-                    + event.getReminder() + ")" + "\n";
+            events += event.getEventDetails(event);
         }
         return events;
     }
