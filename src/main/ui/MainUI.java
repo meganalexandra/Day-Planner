@@ -1,9 +1,11 @@
 package ui;
 
+import exceptions.InvalidTimeException;
+
 import java.io.FileNotFoundException;
 
-public class Main {
-    public static void main(String[] args) {
+public class MainUI {
+    public static void main(String[] args) throws InvalidTimeException {
         try {
             new PlanningAssistant();
         } catch (FileNotFoundException e) {

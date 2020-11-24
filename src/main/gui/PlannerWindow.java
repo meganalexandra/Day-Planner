@@ -1,5 +1,6 @@
 package gui;
 
+import exceptions.InvalidTimeException;
 import model.Day;
 import model.Event;
 import persistence.JsonReader;
@@ -86,7 +87,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
     public void createEventDetailsWindow() {
         eventEntry = new JFrame();
         eventEntry.setSize(400,500);
-        eventEntry.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        eventEntry.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         eventEntry.setResizable(false);
         eventEntry.setLocationRelativeTo(null);
         eventEntry.setTitle("New Event");
@@ -135,15 +136,26 @@ public class PlannerWindow extends JFrame implements ActionListener {
         String location = locationField.getText();
         int time = Integer.parseInt(timeField.getText());
         String reminder = reminderField.getText();
-        Event newEvent = new Event(name, location, time, reminder);
+        Event newEvent = null;
 
-        if (planner.checkDuplicate(newEvent)) {
-            warningWindow();
-        } else {
-            playSound("success_sound.wav");
+        try {
+            newEvent = new Event(name, location, time, reminder);
+            if (planner.checkDuplicate(newEvent)) {
+                warningWindow();
+            } else {
+                playSound("success_sound.wav");
+                eventEntry.dispose();
+            }
+            planner.addEvent(newEvent);
+        } catch (InvalidTimeException e) {
             eventEntry.dispose();
+            eventEntry.setVisible(true);
+            JLabel invalidTime = new JLabel("Invalid time was entered! Please try again.");
+            invalidTime.setBackground(Color.white);
+            invalidTime.setOpaque(true);
+            eventEntry.add(invalidTime);
         }
-        planner.addEvent(newEvent);
+
     }
 
     // EFFECTS: displays the list of events in the planner
@@ -225,7 +237,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         try {
             planner = jsonReader.read();
             System.out.println("Loaded " + planner.getDate() + " from " + JSON_STORE);
-        } catch (IOException e) {
+        } catch (IOException | InvalidTimeException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }

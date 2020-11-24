@@ -1,5 +1,6 @@
 package ui;
 
+import exceptions.InvalidTimeException;
 import model.Day;
 import model.Event;
 import persistence.JsonReader;
@@ -19,7 +20,7 @@ public class PlanningAssistant {
     private JsonReader jsonReader;
 
     // EFFECTS: runs Planning Assistant
-    public PlanningAssistant() throws FileNotFoundException {
+    public PlanningAssistant() throws FileNotFoundException, InvalidTimeException {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         runAssistant();
@@ -27,7 +28,7 @@ public class PlanningAssistant {
 
     // MODIFIES: this
     // EFFECTS: runs the Planning Assistant Application
-    private void runAssistant() {
+    private void runAssistant() throws InvalidTimeException {
         boolean keepGoing = true;
         String command;
         scan = new Scanner(System.in);
@@ -51,7 +52,7 @@ public class PlanningAssistant {
 
     // MODIFIES: this
     // EFFECTS: processes user command
-    private void processCommand(String command) {
+    private void processCommand(String command) throws InvalidTimeException {
         if (command.equals("a")) {
             createEvent();
         } else if (command.equals("n")) {
@@ -87,7 +88,7 @@ public class PlanningAssistant {
 
     // MODIFIES: this
     // EFFECTS: creates an event with the user information
-    private void createEvent() {
+    private void createEvent() throws InvalidTimeException {
         System.out.println("ENTER EVENT DETAILS");
         scan.nextLine();
         System.out.println("Event Name:");
@@ -137,7 +138,7 @@ public class PlanningAssistant {
 
     // MODIFIES: this
     // EFFECTS: loads workroom from file
-    private void loadDay() {
+    private void loadDay() throws InvalidTimeException {
         try {
             planner = jsonReader.read();
             System.out.println("Loaded " + planner.getDate() + " from " + JSON_STORE);

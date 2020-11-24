@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.InvalidTimeException;
 import model.Event;
 import model.Day;
 
@@ -23,7 +24,7 @@ public class JsonReader {
 
     // EFFECTS: reads day from file and returns it;
     // throws IOException if an error occurs reading data from file
-    public Day read() throws IOException {
+    public Day read() throws IOException, InvalidTimeException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseDay(jsonObject);
@@ -41,7 +42,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses day from JSON object and returns it
-    private Day parseDay(JSONObject jsonObject) {
+    private Day parseDay(JSONObject jsonObject) throws InvalidTimeException {
         String date = jsonObject.getString("date");
         Day day = new Day(date);
         addEvents(day, jsonObject);
@@ -50,7 +51,7 @@ public class JsonReader {
 
     // MODIFIES: day
     // EFFECTS: parses events from JSON object and adds them to day
-    private void addEvents(Day day, JSONObject jsonObject) {
+    private void addEvents(Day day, JSONObject jsonObject) throws InvalidTimeException {
         JSONArray jsonArray = jsonObject.getJSONArray("listOfEvents");
         for (Object json : jsonArray) {
             JSONObject nextEvent = (JSONObject) json;
@@ -60,7 +61,7 @@ public class JsonReader {
 
     // MODIFIES: day
     // EFFECTS: parses events from JSON object and adds it to day
-    private void addEvent(Day day, JSONObject jsonObject) {
+    private void addEvent(Day day, JSONObject jsonObject) throws InvalidTimeException {
         String name = jsonObject.getString("entryName");
         String location = jsonObject.getString("location");
         int time = jsonObject.getInt("time");

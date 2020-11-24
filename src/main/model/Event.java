@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.InvalidTimeException;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -10,10 +11,12 @@ public class Event implements Writable {
     private int time;          // time of event entered as HHMM according to a 24 hour clock
     private String reminder;   // reminders for the event
 
-    /* REQUIRES: name, location, time in the format HHMM as an integer <= 2400 and reminder
-     * EFFECTS: creates an Entry with entryName, location, time and reminder
-     */
-    public Event(String entryName, String location, int time, String reminder) {
+
+     // EFFECTS: creates an Entry with entryName, location, time and reminder
+    public Event(String entryName, String location, int time, String reminder) throws InvalidTimeException {
+        if (time < 0 || time > 2400) {
+            throw new InvalidTimeException(this.getTime() + "is an invalid time");
+        }
         name = entryName;
         this.location = location;
         this.time = time;

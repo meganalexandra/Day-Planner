@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.InvalidTimeException;
 import model.Event;
 import model.Day;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ class JsonWriterTest extends JsonTest {
             day = reader.read();
             assertEquals("General Date", day.getDate());
             assertEquals(0, day.numberOfEvents());
-        } catch (IOException e) {
+        } catch (IOException | InvalidTimeException e) {
             fail("Exception should not have been thrown");
         }
     }
@@ -64,7 +65,7 @@ class JsonWriterTest extends JsonTest {
             checkEvent("vote","lougheed mall", 1200, "bring ID", listOfEvents.get(0));
             checkEvent("buy toilet paper","walmart", 1230, "bring reusable bag", listOfEvents.get(1));
 
-        } catch (IOException e) {
+        } catch (IOException | InvalidTimeException e) {
             fail("Exception should not have been thrown");
         }
     }

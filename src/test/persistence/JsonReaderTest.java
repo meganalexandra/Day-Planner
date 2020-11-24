@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.InvalidTimeException;
 import model.Event;
 import model.Day;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class JsonReaderTest extends JsonTest {
         try {
             Day day = reader.read();
             fail("IOException expected");
-        } catch (IOException e) {
+        } catch (IOException | InvalidTimeException e) {
             // pass
         }
     }
@@ -32,7 +33,7 @@ class JsonReaderTest extends JsonTest {
             Day day = reader.read();
             assertEquals("General Date", day.getDate());
             assertEquals(0, day.numberOfEvents());
-        } catch (IOException e) {
+        } catch (IOException | InvalidTimeException e) {
             fail("Couldn't read from file");
         }
     }
@@ -47,7 +48,7 @@ class JsonReaderTest extends JsonTest {
             assertEquals(2, day.numberOfEvents());
             checkEvent("vote","lougheed mall", 1200, "bring ID", listOfEvents.get(0));
             checkEvent("buy toilet paper","walmart", 1230, "bring reusable bag", listOfEvents.get(1));
-        } catch (IOException e) {
+        } catch (IOException | InvalidTimeException e) {
             fail("Couldn't read from file");
         }
     }
