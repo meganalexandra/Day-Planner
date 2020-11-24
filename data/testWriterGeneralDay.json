@@ -1,0 +1,17 @@
+{
+    "date": "General Date",
+    "listOfEvents": [
+        {
+            "reminder": "bring ID",
+            "entryName": "vote",
+            "location": "lougheed mall",
+            "time": 1200
+        },
+        {
+            "reminder": "bring reusable bag",
+            "entryName": "buy toilet paper",
+            "location": "walmart",
+            "time": 1230
+        }
+    ]
+}
