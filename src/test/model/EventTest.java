@@ -25,7 +25,7 @@ public class EventTest {
     }
 
     @Test
-    void testEventInvalidTime() {
+    void testEventInvalidTimeAboveRange() {
         try {
             Event event2 = new Event("concert", "Rogers Arena", 2500, "bring ticket");
             fail("InvalidTimeException should have been thrown");
@@ -34,6 +34,15 @@ public class EventTest {
         }
     }
 
+    @Test
+    void testEventInvalidTimeBelowRange() {
+        try {
+            Event event3 = new Event("concert", "Rogers Arena", -500, "bring ticket");
+            fail("InvalidTimeException should have been thrown");
+        } catch (InvalidTimeException e) {
+            System.out.println("-500 is an invalid time");
+        }
+    }
 
     @Test
     void testGetEventDetails() {

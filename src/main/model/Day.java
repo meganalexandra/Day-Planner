@@ -75,7 +75,6 @@ public class Day implements Writable {
         return result;
     }
 
-    // REQUIRES: non-empty list
     // EFFECTS: returns the names of the Events in the planner
     public String getListOfEventsDetails() {
         String events = "";
