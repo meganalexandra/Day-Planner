@@ -1,5 +1,6 @@
 package gui;
 
+import exceptions.EmptyNameException;
 import exceptions.InvalidTimeException;
 import model.Day;
 import model.Event;
@@ -105,7 +106,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
     // EFFECTS: creates event details fields
     private void createFields() {
         // create name field
-        JLabel name = new JLabel("Name:");
+        JLabel name = new JLabel("*Name:");
         eventEntry.add(name);
         nameField = new JTextField(25);
         eventEntry.add(nameField);
@@ -117,7 +118,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         eventEntry.add(locationField);
 
         // create time field
-        JLabel time = new JLabel("Time (enter as 24 hours (H)HMM):");
+        JLabel time = new JLabel("*Time (enter as 24 hours (H)HMM):");
         eventEntry.add(time);
         timeField = new JTextField(11);
         eventEntry.add(timeField);
@@ -125,8 +126,12 @@ public class PlannerWindow extends JFrame implements ActionListener {
         // create reminder field
         JLabel reminder = new JLabel("Reminder:");
         eventEntry.add(reminder);
-        reminderField = new JTextField(23);
+        reminderField = new JTextField(24);
         eventEntry.add(reminderField);
+
+        // create required label
+        JLabel required = new JLabel("* fields required");
+        eventEntry.add(required);
 
     }
 
@@ -148,14 +153,31 @@ public class PlannerWindow extends JFrame implements ActionListener {
             }
             planner.addEvent(newEvent);
         } catch (InvalidTimeException e) {
-            eventEntry.dispose();
-            eventEntry.setVisible(true);
-            JLabel invalidTime = new JLabel("Invalid time was entered! Please try again.");
-            invalidTime.setBackground(Color.white);
-            invalidTime.setOpaque(true);
-            eventEntry.add(invalidTime);
+            invalidTimeWarning();
+        } catch (EmptyNameException e) {
+            emptyNameWarning();
         }
 
+    }
+
+    // creates and displays invalid time warning label
+    public void invalidTimeWarning() {
+        JLabel invalidTime = new JLabel("Invalid time was entered! Please try again.");
+        eventEntry.dispose();
+        eventEntry.setVisible(true);
+        invalidTime.setBackground(Color.white);
+        invalidTime.setOpaque(true);
+        eventEntry.add(invalidTime);
+    }
+
+    // creates and displays empty name field warning
+    private void emptyNameWarning() {
+        JLabel emptyName = new JLabel("Please enter an event name.");
+        eventEntry.dispose();
+        eventEntry.setVisible(true);
+        emptyName.setBackground(Color.white);
+        emptyName.setOpaque(true);
+        eventEntry.add(emptyName);
     }
 
     // EFFECTS: displays the list of events in the planner
@@ -237,7 +259,7 @@ public class PlannerWindow extends JFrame implements ActionListener {
         try {
             planner = jsonReader.read();
             System.out.println("Loaded " + planner.getDate() + " from " + JSON_STORE);
-        } catch (IOException | InvalidTimeException e) {
+        } catch (IOException | InvalidTimeException | EmptyNameException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }

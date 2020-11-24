@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.EmptyNameException;
 import exceptions.InvalidTimeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ public class DayTest {
     private Event event3;
 
     @BeforeEach
-    void runBefore() throws InvalidTimeException {
+    void runBefore() throws InvalidTimeException, EmptyNameException {
         dayTest = new Day("Sept 10");
         event1 = new Event("voting", "Lougheed Mall", 1200, "bring ID and voting card");
         event2 = new Event("club interview", "zoom", 1600, "https://us02web.zoom.us/u/kbt7MwD02n");

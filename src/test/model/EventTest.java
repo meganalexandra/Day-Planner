@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.EmptyNameException;
 import exceptions.InvalidTimeException;
 import org.junit.jupiter.api.Test;
 
@@ -11,12 +12,27 @@ public class EventTest {
 
     // test Event constructor
     @Test
+    void testEventWithoutOptionalFields() {
+        try {
+            event1 = new Event ("voting", "", 1300, "");
+        } catch (InvalidTimeException e) {
+            fail("InvalidTimeException should not have been thrown");
+        } catch (EmptyNameException e) {
+            fail("EmptyNameException should not have been thrown");
+        }
+        assertEquals("voting", event1.getName());
+        assertEquals(1300, event1.getTime());
+    }
+
+    @Test
     void testEventValidTime() {
         try {
             event1 = new Event("voting", "Lougheed Mall", 1200, "bring ID and voting card");
             // expected
         } catch (InvalidTimeException e) {
             fail("InvalidTimeException should not have been thrown");
+        } catch (EmptyNameException e) {
+            fail("EmptyNameException should not have been thrown");
         }
         assertEquals("voting", event1.getName());
         assertEquals("Lougheed Mall", event1.getLocation());
@@ -31,6 +47,8 @@ public class EventTest {
             fail("InvalidTimeException should have been thrown");
         } catch (InvalidTimeException e) {
             System.out.println("2500 is an invalid time");
+        } catch (EmptyNameException e) {
+            fail("InvalidTimeException should have been thrown");
         }
     }
 
@@ -41,6 +59,19 @@ public class EventTest {
             fail("InvalidTimeException should have been thrown");
         } catch (InvalidTimeException e) {
             System.out.println("-500 is an invalid time");
+        } catch (EmptyNameException e) {
+            fail("InvalidTimeException should have been thrown");
+        }
+    }
+
+    @Test
+    void testEventEmptyNameField() {
+        try {
+            Event event4 = new Event("", "dentist appointment", 1400, "bring retainer");
+        } catch (InvalidTimeException e) {
+            fail("EmptyNameException should have been thrown");
+        } catch (EmptyNameException e) {
+            // expected
         }
     }
 
@@ -50,6 +81,8 @@ public class EventTest {
             event1 = new Event("voting", "Lougheed Mall", 1200, "bring ID and voting card");
         } catch (InvalidTimeException e) {
             fail("InvalidTimeException should not have been thrown");
+        } catch (EmptyNameException e) {
+            fail("EmptyNameException should not have been thrown");
         }
 
         assertEquals("\n1200 : voting at Lougheed Mall (reminder:bring ID and voting card)\n",

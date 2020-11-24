@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.EmptyNameException;
 import exceptions.InvalidTimeException;
 import model.Event;
 import model.Day;
@@ -21,7 +22,7 @@ class JsonReaderTest extends JsonTest {
         try {
             Day day = reader.read();
             fail("IOException expected");
-        } catch (IOException | InvalidTimeException e) {
+        } catch (IOException | InvalidTimeException | EmptyNameException e) {
             // pass
         }
     }
@@ -33,7 +34,7 @@ class JsonReaderTest extends JsonTest {
             Day day = reader.read();
             assertEquals("General Date", day.getDate());
             assertEquals(0, day.numberOfEvents());
-        } catch (IOException | InvalidTimeException e) {
+        } catch (IOException | InvalidTimeException | EmptyNameException e) {
             fail("Couldn't read from file");
         }
     }
@@ -48,7 +49,7 @@ class JsonReaderTest extends JsonTest {
             assertEquals(2, day.numberOfEvents());
             checkEvent("vote","lougheed mall", 1200, "bring ID", listOfEvents.get(0));
             checkEvent("buy toilet paper","walmart", 1230, "bring reusable bag", listOfEvents.get(1));
-        } catch (IOException | InvalidTimeException e) {
+        } catch (IOException | InvalidTimeException | EmptyNameException e) {
             fail("Couldn't read from file");
         }
     }

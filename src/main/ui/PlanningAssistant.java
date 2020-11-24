@@ -1,5 +1,6 @@
 package ui;
 
+import exceptions.EmptyNameException;
 import exceptions.InvalidTimeException;
 import model.Day;
 import model.Event;
@@ -20,7 +21,7 @@ public class PlanningAssistant {
     private JsonReader jsonReader;
 
     // EFFECTS: runs Planning Assistant
-    public PlanningAssistant() throws FileNotFoundException, InvalidTimeException {
+    public PlanningAssistant() throws FileNotFoundException, InvalidTimeException, EmptyNameException {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         runAssistant();
@@ -28,7 +29,7 @@ public class PlanningAssistant {
 
     // MODIFIES: this
     // EFFECTS: runs the Planning Assistant Application
-    private void runAssistant() throws InvalidTimeException {
+    private void runAssistant() throws InvalidTimeException, EmptyNameException {
         boolean keepGoing = true;
         String command;
         scan = new Scanner(System.in);
@@ -52,7 +53,7 @@ public class PlanningAssistant {
 
     // MODIFIES: this
     // EFFECTS: processes user command
-    private void processCommand(String command) throws InvalidTimeException {
+    private void processCommand(String command) throws InvalidTimeException, EmptyNameException {
         if (command.equals("a")) {
             createEvent();
         } else if (command.equals("n")) {
@@ -88,7 +89,7 @@ public class PlanningAssistant {
 
     // MODIFIES: this
     // EFFECTS: creates an event with the user information
-    private void createEvent() throws InvalidTimeException {
+    private void createEvent() throws InvalidTimeException, EmptyNameException {
         System.out.println("ENTER EVENT DETAILS");
         scan.nextLine();
         System.out.println("Event Name:");
@@ -138,7 +139,7 @@ public class PlanningAssistant {
 
     // MODIFIES: this
     // EFFECTS: loads workroom from file
-    private void loadDay() throws InvalidTimeException {
+    private void loadDay() throws InvalidTimeException, EmptyNameException {
         try {
             planner = jsonReader.read();
             System.out.println("Loaded " + planner.getDate() + " from " + JSON_STORE);

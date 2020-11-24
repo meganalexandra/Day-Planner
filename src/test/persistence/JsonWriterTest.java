@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.EmptyNameException;
 import exceptions.InvalidTimeException;
 import model.Event;
 import model.Day;
@@ -29,7 +30,7 @@ class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterEmptyDay() {
+    void testWriterEmptyDay() throws EmptyNameException {
         try {
             Day day = new Day("General Date");
             JsonWriter writer = new JsonWriter("./data/testWriterEmptyDay.json");
@@ -47,7 +48,7 @@ class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterGeneralDay() {
+    void testWriterGeneralDay() throws EmptyNameException {
         try {
             Day day = new Day("General Date");
             day.addEvent(new Event("vote","lougheed mall", 1200, "bring ID"));

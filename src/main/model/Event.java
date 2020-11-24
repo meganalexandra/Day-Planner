@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.EmptyNameException;
 import exceptions.InvalidTimeException;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -12,8 +13,12 @@ public class Event implements Writable {
     private String reminder;   // reminders for the event
 
 
-     // EFFECTS: creates an Entry with entryName, location, time and reminder
-    public Event(String entryName, String location, int time, String reminder) throws InvalidTimeException {
+    // EFFECTS: creates an Entry with entryName, time and an optional location or reminder
+    public Event(String entryName, String location, int time, String reminder)
+            throws InvalidTimeException, EmptyNameException {
+        if (entryName.isEmpty()) {
+            throw new EmptyNameException("name field empty");
+        }
         if (time < 0 || time > 2400) {
             throw new InvalidTimeException(this.getTime() + "is an invalid time");
         }
