@@ -88,4 +88,32 @@ public class EventTest {
         assertEquals("\n1200 : voting at Lougheed Mall (reminder:bring ID and voting card)\n",
                 event1.getEventDetails());
     }
+
+    @Test
+    void testGetEventDetailsNoLocation() {
+        try {
+            event1 = new Event("voting", "", 1200, "bring ID and voting card");
+        } catch (InvalidTimeException e) {
+            fail("InvalidTimeException should not have been thrown");
+        } catch (EmptyNameException e) {
+            fail("EmptyNameException should not have been thrown");
+        }
+
+        assertEquals("\n1200 : voting (reminder:bring ID and voting card)\n",
+                event1.getEventDetails());
+    }
+
+    @Test
+    void testGetEventDetailsNoReminder() {
+        try {
+            event1 = new Event("voting", "Lougheed Mall", 1200, "");
+        } catch (InvalidTimeException e) {
+            fail("InvalidTimeException should not have been thrown");
+        } catch (EmptyNameException e) {
+            fail("EmptyNameException should not have been thrown");
+        }
+
+        assertEquals("\n1200 : voting at Lougheed Mall (reminder:N/A)\n",
+                event1.getEventDetails());
+    }
 }

@@ -25,14 +25,15 @@ keep an organized record and track different activities or events I have for the
 6. As a user, I want to be able to load my Day planner from file.
 
 ## Phase 4: Task 2
-I designed and tested the Event class in my model package to be robust. Previously, the constructor for day had a requires
+I designed and tested the Event class in my model package to be robust. Previously, the constructor for event had a requires
 clause that needed the user to ensure they were entering a valid time (between 0 and 2400) and an entry name. However, I redesigned the 
 constructor to throw an InvalidTimeException if the user entered a value outside of the range of 0 to 2400. The exception
 is caught in the gui where an error message is printed notifying the user that they have entered an invalid time and prompts
 them to edit their entry and try again. I also constructed the EmptyNameException to ensure the user has entered an event 
-name as the entry would not meaningful otherwise. The exception prints a message notifying the user they must require a
+name as the entry would not be meaningful otherwise. The exception prints a message notifying the user they must require a
 name for the even entry before they can continue. The class is now robust as there are no requires clauses and now only 
-creates events with a name and a valid time.
+creates events with a name and a valid time. The location and reminder fields are optional ones, and the getEventDetails
+method in the Event class has been redesigned to print a proper entry in those scenarios. 
 
 ## Phase 4: Task 3
 I would refactor both the PlanningAssistant and PlannerWindow classes. To increase cohesion, I would refactor the methods 

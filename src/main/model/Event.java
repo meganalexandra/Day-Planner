@@ -45,8 +45,17 @@ public class Event implements Writable {
     }
 
     public String getEventDetails() {
-        return "\n" + this.getTime() + " : " + this.getName() + " at " + this.getLocation() + " (reminder:"
-                + this.getReminder() + ")" + "\n";
+        reminder = this.getReminder();
+        if (reminder.isEmpty()) {
+            reminder = "N/A";
+        }
+        if (location.isEmpty()) {
+            return "\n" + this.getTime() + " : " + this.getName() + " (reminder:"
+                    + reminder + ")" + "\n";
+        } else {
+            return "\n" + this.getTime() + " : " + this.getName() + " at " + this.getLocation() + " (reminder:"
+                    + reminder + ")" + "\n";
+        }
     }
 
     @Override
